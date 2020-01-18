@@ -1,0 +1,208 @@
+<html>
+
+
+	<head>
+		<title>Climb</title>
+		
+		<meta charset="UTF-8">
+		<meta name="description" content="Resident summary">
+		
+		<link rel="icon" href="images/uglytreeslogo.png">
+		<link rel="stylesheet" href="src/styles.css">
+
+		
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+	    tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      processEscapes: true
+	    }
+	  });
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+		<script language='JavaScript' type='text/JavaScript' src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script language='JavaScript' type='text/JavaScript' src="lib/velocity.min.js"></script>
+		<script language='JavaScript' type='text/JavaScript' src='lib/d3.v5.min.js'></script> 
+		<script language='JavaScript' type='text/JavaScript' src="lib/dropzone.js"></script>
+		<script>
+
+
+		
+
+
+			function init(){
+
+				console.log("init");
+				
+				
+				makeCall("getCurrentEvents()", 
+					function(success) {
+
+						renderNews(success);
+					
+						//if (success.granted){
+							//alert("Success");
+						//}else{
+							//alert("Permission denied please log in");
+						//}
+					
+					},
+					function(failure){
+						//console.log("failure", failure);
+						alert("Permission denied please log in");
+					});
+
+
+			}
+			
+			
+			
+			
+			function renderNews(obj){
+			
+				$("#newsLoader").remove();
+				if (obj.residents == null || obj.residents.length == 0) $("#upcomingResidents").append("No upcoming or overdue assessments.");
+				else for (var i = 0; i < obj.residents.length; i ++){
+					var res = obj.residents[i].name;
+					var day = obj.residents[i].day;
+					var col = day == "NEW" ? "green" : parseFloat(day) > 180 ? "red" : "orange";
+					var msg = day == "NEW" ? res + " has not been assessed." :
+											res + " has not been assessed for " + day + " days."; 
+					var html = `<span style="color:` + col + `">` + msg + `</span><br>`;
+					$("#upcomingResidents").append(html);
+				
+				}
+			
+			
+			}
+			
+			
+			// Check for permission
+			function makeCall(fn, callback = function(response) {}, errorFn = function(errorMsg) {} ){
+
+
+				var scriptUrl = "https://script.google.com/macros/s/AKfycbzlGdDh25NXMgk-962_Y2P49Wm9LiXy1kyntd1PpYAzPoz92xA/exec";
+				var url = scriptUrl + "?fn=" + fn + "&callback=?";
+				console.log("Requesting", url);
+
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					success: callback,
+					error:errorFn
+				});
+
+			}
+
+
+
+
+
+
+		</script>
+
+	</head>
+	<body  onload="init()">
+
+		<div id="main">
+
+
+			
+			
+			
+			
+			<ul class="flex-container">
+			
+			
+				<li class="flex-item wide">
+					<div> 
+						<h1 style="text-align:center; font-size:300%; color:#008cba">Clinical Manager's Bulletin</h1>
+						
+						
+						<div style="margin-left:1em; margin-top:-1em; text-align:center; font-size:16px;">
+							
+							A summary of resident care and upcoming events
+							
+						</div>
+						
+						
+						
+					</div>
+				</li>
+			
+			
+				<li class="flex-item wide">
+					<div> 
+						<h2>Upcoming InterRai assessments</h2>
+						
+						<div id="newsLoader" class="loader"></div>
+						
+						<div id="upcomingResidents" style="margin-left:1em; line-height:150%; font-size:16px;">
+							
+							
+							
+						</div>
+						
+						
+					</div>
+				</li>
+			
+			
+			
+				<li class="flex-item btn">
+					<div>
+						<a class="mainbtn" href="continence/">
+							<h2>Continence allocation</h2>
+							
+							Pad allocations for all residents
+						</a>
+						
+					</div>
+				</li>
+
+				<li class="flex-item btn">
+					<div> 
+						<h2>InterRai assessments</h2>
+						
+						Due dates of all InterRai assessments
+						
+						
+					</div>
+				</li>
+
+				<li class="flex-item btn">
+					<div> 
+						<h2>InterRai allocation</h2>
+						
+						Allocations of residents to nursing staff 
+						
+						
+					</div>
+				</li>
+				
+				
+				<li class="flex-item wide">
+					<div> 
+						<h2>A reminder from the clinical manager</h2>
+						
+						Greetings staff! @ananaadmirable speaking. Here is what I have to say...
+						
+						
+					</div>
+				</li>
+
+			</ul>
+			
+
+
+			
+		</div>
+
+		
+
+	</body>
+
+
+
+
+</html>
