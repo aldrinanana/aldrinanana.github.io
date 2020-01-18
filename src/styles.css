@@ -118,13 +118,20 @@ h1 {
 .dataTable{
 	margin-left:1em; 
 	line-height:150%; 
-	font-size:16px;
+	font-size:14px;
 	
 }
 
 
 .dataTable tr{
 	padding: 2em;
+	
+}
+
+
+.dataTable th{
+	background-color:#696969;
+	color:white;
 	
 }
 

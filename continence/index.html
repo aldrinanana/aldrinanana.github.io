@@ -33,11 +33,11 @@
 
 				console.log("init");
 				
-				/*
-				makeCall("getCurrentEvents()", 
+				
+				makeCall("getContinenceAllocation()", 
 					function(success) {
 
-						renderNews(success);
+						render(success);
 					
 						//if (success.granted){
 							//alert("Success");
@@ -50,9 +50,6 @@
 						//console.log("failure", failure);
 						alert("Permission denied please log in");
 					});
-				*/
-				
-				render([{unit: "The Pacifica", name: "Jordan", pad: "blue", col: "#008cba"}, {unit: "8 Puriri St", name: "Aldrin", pad: "red", col: "#ac0404"}]);
 				
 
 
@@ -61,28 +58,106 @@
 			
 			
 			
-			function render(pads){
+			function render(obj){
 			
-				$("#newsLoader").remove();
-				if (pads.length == 0) $("#upcomingResidents").append("No available information.");
-				else for (var i = 0; i < pads.length; i ++){
-					var unit = pads[i].unit;
-					var res = pads[i].name;
-					var pad = pads[i].pad;
-					var col = pads[i].col;
+			
+				
+				console.log("Rendering", obj);
+
+			
+				var residents = obj.residents;
+				var pads = obj.pads;
+			
+				$(".loader").remove();
+				if (pads.length == 0 || residents.length == 0) $("#upcomingResidents").append("No available information.");
+				else {
+				
+				
+					// Render pad table
+					for (var i = 0; i < pads.length; i ++){
 					
-					var html = `<tr>
-									<td>` + unit + `</td>
-									<td>` + res + `</td>
-									<td style="color:white; background-color:` + col + `">` + pad + `</td>
-								</tr>`;
-					$("#dataDisplay").append(html);
+					
+						var padName = pads[i].pad;
+						var col = pads[i].col;
+						var freq = pads[i].freq;
+						
+						console.log(pads[i]);
+					
+						var html = `<tr>
+										<td style="text-align:center; color:white; background-color:` + col + `">` + padName + `</td>
+										<td style="text-align:center">` + freq + `</td>
+										<td style="text-align:center">` + freq*7 + `</td>
+									</tr>`;
+						$("#dataDisplayPads").append(html);
+					
+					}
+					
+				
+					// Render resident table
+					for (var i = 0; i < residents.length; i ++){
+						var unit = residents[i].unit;
+						var res = residents[i].name;
+
+						
+						if (unit == "" || res == "") continue;
+						
+						
+						var html = "";			
+						if (res == "Name of Resident"){
+							html = `<tr>
+										<th>` + unit + `</th>
+										<th>Name of Resident</th>
+										<th>AM</th>
+										<th>PM</th>
+										<th>Night</th>
+									</tr>`
+									
+						
+						}
+						
+						else {
+						
+							
+							
+							html = `<tr>
+											<td style="text-align:center">` + unit + `</td>
+											<td style="text-align:center">` + res + `</td>`;
+							
+							// AM / PM / Night
+							for (var t = 0; t < 3; t ++){
+							
+								var padID = residents[i].pads[t];
+								
+								var pad, col, padName;
+								
+								if (padID < 0 || padID >= pads.length) {
+									col = "white";
+									padName = "";
+								}else {
+									pad = pads[padID];
+									console.log("pad", pad, padID, residents[i]);
+									col = pad.col;
+									padName = pad.pad;
+								}
+								
+
+								html += `<td style="text-align:center; color:white; background-color:` + col + `">` + padName + `</td>`;
+							
+							
+							}
+
+											
+							html += `</tr>`;
+							
+							
+						}
+						$("#dataDisplay").append(html);
+					
+					}
+				
 				
 				}
-			
-			
 			}
-			
 			
 			// Check for permission
 			function makeCall(fn, callback = function(response) {}, errorFn = function(errorMsg) {} ){
@@ -143,31 +218,8 @@
 			
 			
 			
-
-			
-				<li class="flex-item medium">
-					<div> 
-						<h1 style="text-align:center; color:#008cba">Continence allocation</h1>
-						
-						
-						<div id="newsLoader" class="loader"></div>
-						
-						<table id="dataDisplay" class="dataTable" cellpadding="5px">
-							
-								<tr>
-									<th>Unit</th>
-									<th>Name</th>
-									<th>Pads</th>
-								</tr>
-
-							
-						</table>
 	
-					</div>
-				</li>
-				
-				
-				<li class="flex-item medium">
+				<li class="flex-item wide">
 					<div> 
 						<h1 style="text-align:center; color:#008cba">Pad frequencies</h1>
 						
@@ -175,13 +227,42 @@
 						<div style="margin-left:1em; margin-top:-1em; text-align:center; font-size:16px;">
 							
 							
+							<div class="loader"></div>
+							
+							<table id="dataDisplayPads" class="dataTable" cellpadding="5px" style="width:60%; margin-left:20%">
+							
+								<tr>
+									<th>Pad</th>
+									<th>Daily count</th>
+									<th>Weekly count</th>
+								</tr>
+
+							
+						</table>
 							
 						</div>
-						
+						<br>
 						
 						
 					</div>
 				</li>
+			
+				<li class="flex-item wide">
+					<div> 
+						<h1 style="text-align:center; color:#008cba">Continence allocation</h1>
+						
+						
+						<div class="loader"></div>
+						
+						<table id="dataDisplay" class="dataTable" cellpadding="5px" style="width:80%; margin-left:10%">
+
+							
+						</table>
+	
+					</div>
+				</li>
+				
+			
 				
 
 			</ul>
