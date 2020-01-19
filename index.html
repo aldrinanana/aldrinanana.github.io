@@ -82,12 +82,17 @@
 					
 					 // Birthdays
 					 for (var i = 0; i < obj.birthdays.length; i ++){
-						var html = `<div><h2 style="text-align:center">Happy birthday ` + obj.birthdays[i] + `! &#x1F973;&#x1F973;</h2></div>`;
-						$("#birthdayDIV").append(html);
+						var html = `<li style="display:none" class="birthday flex-item">
+										<div>
+											<h2 style="text-align:center">Happy birthday ` + obj.birthdays[i] + `! &#x1F973;&#x1F973;</h2>
+										</div>
+									</li>`;
+						$("#mainDiv").after(html);
+						
 					 }
 					 
 					 if (obj.birthdays.length > 0) {
-						$("#birthdayDIV").show(300);
+						$(".birthday").show(300);
 						
 						setTimeout(function(){
 							confetti.start(); 
@@ -133,15 +138,11 @@
 
 		<div id="main">
 
-
-			
-			
-			<div id="emitter"></div>
 			
 			<ul class="flex-container">
 			
 			
-				<li class="flex-item wide">
+				<li id="mainDiv" class="flex-item wide">
 					<div> 
 						<h1 style="text-align:center; font-size:300%; color:#008cba">Clinical Manager's Bulletin</h1>
 						
@@ -158,10 +159,7 @@
 						
 					</div>
 				</li>
-				
-				<li id="birthdayDIV" style="display:none" class="flex-item">
 
-				</li>
 
 			
 				<li class="flex-item wide">
