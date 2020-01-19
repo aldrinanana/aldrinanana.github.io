@@ -24,6 +24,8 @@
 		<script language='JavaScript' type='text/JavaScript' src="lib/velocity.min.js"></script>
 		<script language='JavaScript' type='text/JavaScript' src='lib/d3.v5.min.js'></script> 
 		<script language='JavaScript' type='text/JavaScript' src="lib/dropzone.js"></script>
+		<script language='JavaScript' type='text/JavaScript' src="lib/confetti.js-master/confetti.min.js"></script>
+		
 		<script>
 
 
@@ -37,7 +39,7 @@
 				
 				makeCall("getCurrentEvents()", 
 					function(success) {
-
+						
 						renderNews(success);
 					
 						//if (success.granted){
@@ -60,17 +62,42 @@
 			
 			function renderNews(obj){
 			
+
+			
 				$("#newsLoader").remove();
 				if (obj.residents == null || obj.residents.length == 0) $("#upcomingResidents").append("No upcoming or overdue assessments.");
-				else for (var i = 0; i < obj.residents.length; i ++){
-					var res = obj.residents[i].name;
-					var day = obj.residents[i].day;
-					var col = day == "NEW" ? "green" : parseFloat(day) > 180 ? "red" : "orange";
-					var msg = day == "NEW" ? res + " has not been assessed." :
-											res + " has not been assessed for " + day + " days."; 
-					var html = `<span style="color:` + col + `">` + msg + `</span><br>`;
-					$("#upcomingResidents").append(html);
+				else {
 				
+					for (var i = 0; i < obj.residents.length; i ++){
+						var res = obj.residents[i].name;
+						var day = obj.residents[i].day;
+						var col = day == "NEW" ? "green" : parseFloat(day) > 180 ? "red" : "orange";
+						var msg = day == "NEW" ? res + " has not been assessed." :
+												res + " has not been assessed for " + day + " days."; 
+						var html = `<span style="color:` + col + `">` + msg + `</span><br>`;
+						$("#upcomingResidents").append(html);
+				
+					}
+					
+					
+					 // Birthdays
+					 for (var i = 0; i < obj.birthdays.length; i ++){
+						var html = `<div><h2 style="text-align:center">Happy birthday ` + obj.birthdays[i] + `! &#x1F973;&#x1F973;</h2></div>`;
+						$("#birthdayDIV").append(html);
+					 }
+					 
+					 if (obj.birthdays.length > 0) {
+						$("#birthdayDIV").show(300);
+						
+						setTimeout(function(){
+							confetti.start(); 
+							
+							setTimeout(function(){
+								confetti.stop(); 
+							}, 5000);
+						}, 1000);
+					 }
+					
 				}
 			
 			
@@ -109,7 +136,7 @@
 
 			
 			
-			
+			<div id="emitter"></div>
 			
 			<ul class="flex-container">
 			
@@ -121,9 +148,9 @@
 						
 						<div style="margin-left:1em; margin-top:-1em; text-align:center; font-size:16px;">
 							
-							A summary of resident care and upcoming events
+							A summary of resident care and upcoming events <br> 
 							
-							<span style="font-size:80%">by Aldrin Tan Anana</span>
+							<span style="font-size:80%">by Aldrin Tan Anana, RN</span>
 							
 						</div>
 						
@@ -131,7 +158,11 @@
 						
 					</div>
 				</li>
-			
+				
+				<li id="birthdayDIV" style="display:none" class="flex-item">
+
+				</li>
+
 			
 				<li class="flex-item wide">
 					<div> 
