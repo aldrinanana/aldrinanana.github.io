@@ -68,14 +68,51 @@
 				if (obj.residents == null || obj.residents.length == 0) $("#upcomingResidents").append("No upcoming or overdue assessments.");
 				else {
 				
+				
+					var numNEW = 0;
+					var numRED = 0;
+					var numORANGE = 0;
+					for (var i = 0; i < obj.residents.length; i ++){
+						var day = obj.residents[i].day;
+						if (day == "NEW") numNEW ++;
+						else if (parseFloat(day) > 180) numRED ++;
+						else numORANGE ++;
+					}
+					
+					if (numNEW > 0){
+						var html = `<span id="status_green" style="font-size:110%;color:green"><b>
+												<u style="cursor:pointer" onclick='$(".status_green").toggle(0)'>
+												`	+ numNEW + ` residents have not been assessed.
+												</u></b></span><br>`;
+						$("#upcomingResidents").append(html);
+					}
+					
+					if (numRED > 0){
+						var html = `<span id="status_red" style="font-size:110%; color:red"><b>
+												<u style="cursor:pointer" onclick='$(".status_red").toggle(0)'>
+													` + numRED + ` residents are overdue.</b>
+												</u></b></span><br>`;
+						$("#upcomingResidents").append(html);
+					}
+					
+					if (numORANGE > 0){
+						var html = `<span id="status_orange" style="font-size:110%;color:orange"><b>
+												<u style="cursor:pointer" onclick='$(".status_orange").toggle(0)'>
+													` + numORANGE + ` residents require assessment in the next 2 weeks.
+												</u></b></span><br>`;
+						$("#upcomingResidents").append(html);
+					}
+				
+				
 					for (var i = 0; i < obj.residents.length; i ++){
 						var res = obj.residents[i].name;
 						var day = obj.residents[i].day;
 						var col = day == "NEW" ? "green" : parseFloat(day) > 180 ? "red" : "orange";
-						var msg = day == "NEW" ? res + " has not been assessed." :
-												res + " has not been assessed for " + day + " days."; 
-						var html = `<span style="color:` + col + `">` + msg + `</span><br>`;
-						$("#upcomingResidents").append(html);
+						var msg = res; // day == "NEW" ? res + " has not been assessed." :
+										//	res + " has not been assessed for " + day + " days."; 
+						var html = `<span class="status_` + col + `" style="display:none; color:` + col + `"><br>` + msg + `</span>`;
+						var div = "#status_" + col;
+						$(div).after(html);
 				
 					}
 					
@@ -164,23 +201,6 @@
 
 
 			
-				<li class="flex-item wide">
-					<div> 
-						<h2>Upcoming InterRai assessments</h2>
-						
-						<div id="newsLoader" class="loader"></div>
-						
-						<div id="upcomingResidents" style="margin-left:1em; line-height:150%; font-size:16px;">
-							
-							
-							
-						</div>
-						
-						
-					</div>
-				</li>
-			
-			
 			
 				<li class="flex-item btn">
 					<a class="mainbtn" href="continence/">
@@ -210,6 +230,24 @@
 				
 				
 				
+			
+				<li class="flex-item wide">
+					<div> 
+						<h2>Upcoming InterRai assessments</h2>
+						
+						<div id="newsLoader" class="loader"></div>
+						
+						<div id="upcomingResidents" style="margin-left:1em; line-height:150%; font-size:16px;">
+							
+							
+							
+							
+						</div>
+						
+						
+					</div>
+				</li>
+			
 				
 				<li style="display:none" class="flex-item wide">
 					<div> 
