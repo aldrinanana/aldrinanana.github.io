@@ -64,11 +64,30 @@
 			
 
 			
-				$("#newsLoader").remove();
+				$(".loader").remove();
 				if (obj.residents == null || obj.residents.length == 0) $("#upcomingResidents").append("No upcoming or overdue assessments.");
 				else {
 				
 				
+					// Blog
+					var blogHTML = obj.blog.html;
+					var blobImages = obj.blog.images;
+					$("#theBlog").html(blogHTML);
+					
+					
+					console.log("blobImages", blobImages);
+					/*
+					for (var b = 0; b < blobImages.length; b ++){
+						var blob = blobImages[b];
+						const imageUrl = URL.createObjectURL(blob);
+						const img = document.querySelector('img');
+						img.addEventListener('load', () => URL.revokeObjectURL(imageUrl));
+						document.querySelector('img').src = imageUrl;
+					}
+					*/
+				
+				
+					// InterRai
 					var numNEW = 0;
 					var numRED = 0;
 					var numORANGE = 0;
@@ -260,6 +279,20 @@
 					</a>
 				</li>
 				
+				
+				<li class="flex-item btn">
+				
+					<a class="mainbtn" href="proposals/">
+						<div> 
+							<h2>Proposals</h2>
+							
+							Visions for the future
+							
+							
+						</div>
+					</a>
+				</li>
+				
 
 				<li class="flex-item btn">
 				
@@ -274,24 +307,6 @@
 					</a>
 				</li>
 				
-
-				
-				<li class="flex-item wide">
-					<div> 
-						<h2  style="text-align:center; font-size:200%;">A note from the Clinical Manager</h2> <br><br>
-						
-						
-						<div style="margin-left:1em; margin-top:-1em; text-align:center; font-size:16px;">
-							
-							Hello everybody!!!
-							
-						</div>
-						
-						
-						
-					</div>
-				</li>
-
 
 
 			</ul>
