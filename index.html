@@ -35,7 +35,7 @@
 			function init(){
 
 				console.log("init");
-				
+				doingConfetti = false;
 				
 				makeCall("getCurrentEvents()", 
 					function(success) {
@@ -119,7 +119,7 @@
 					
 					 // Birthdays
 					 for (var i = 0; i < obj.birthdays.length; i ++){
-						var html = `<li style="display:none" class="birthday flex-item">
+						var html = `<li onclick="doConfetti()" style="display:none" class="birthday bday_wrapper flex-item">
 										<div>
 											<h2 style="text-align:center">Happy birthday ` + obj.birthdays[i] + `! &#x1F973;&#x1F973;</h2>
 										</div>
@@ -130,18 +130,29 @@
 					 
 					 if (obj.birthdays.length > 0) {
 						$(".birthday").show(300);
-						
 						setTimeout(function(){
-							confetti.start(); 
-							
-							setTimeout(function(){
-								confetti.stop(); 
-							}, 3000);
+							doConfetti();
 						}, 1000);
 					 }
 					
 				}
 			
+			
+			}
+			
+			
+			function doConfetti(){
+				if (doingConfetti) return;
+				doingConfetti = true;
+			
+				
+				confetti.start(); 
+				
+				setTimeout(function(){
+					doingConfetti = false;
+					confetti.stop(); 
+				}, 3000);
+				
 			
 			}
 			
@@ -197,7 +208,28 @@
 					</div>
 				</li>
 
+				
+				
 
+				
+			
+				<li class="flex-item wide">
+					<div> 
+						<h2>Upcoming InterRai assessments</h2>
+						
+						<div id="newsLoader" class="loader"></div>
+						
+						<div id="upcomingResidents" style="margin-left:1em; line-height:150%; font-size:16px;">
+							
+							
+							
+							
+						</div>
+						
+						
+					</div>
+				</li>
+			
 
 
 			
@@ -228,36 +260,30 @@
 					</a>
 				</li>
 				
+
+				<li class="flex-item btn">
 				
-				
-			
-				<li class="flex-item wide">
-					<div> 
-						<h2>Upcoming InterRai assessments</h2>
-						
-						<div id="newsLoader" class="loader"></div>
-						
-						<div id="upcomingResidents" style="margin-left:1em; line-height:150%; font-size:16px;">
+					<a class="mainbtn">
+						<div> 
+							<h2>Training courses</h2>
 							
-							
+							Past and upcoming training courses
 							
 							
 						</div>
-						
-						
-					</div>
+					</a>
 				</li>
-			
 				
-				<li style="display:none" class="flex-item wide">
+
+				
+				<li class="flex-item wide">
 					<div> 
 						<h2  style="text-align:center; font-size:200%;">A note from the Clinical Manager</h2> <br><br>
 						
 						
 						<div style="margin-left:1em; margin-top:-1em; text-align:center; font-size:16px;">
 							
-							<iframe style="width:80%; margin-left:10%; height: 800px" src="https://docs.google.com/document/d/e/2PACX-1vToFObg92uY340sTW5ck7-sYzdUde2pmCkbQrG24smkUrTUGDEY_F1EuEPzot_bdZicaBvdrBc4RiOe/pub?embedded=true"></iframe>
-
+							Hello everybody!!!
 							
 						</div>
 						
