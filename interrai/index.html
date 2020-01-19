@@ -2,7 +2,7 @@
 
 
 	<head>
-		<title>Climb - Continence allocation</title>
+		<title>Climb - InterRai assessments</title>
 		
 		<meta charset="UTF-8">
 		<meta name="description" content="Continence allocation">
@@ -34,7 +34,7 @@
 				console.log("init");
 				
 				
-				makeCall("getContinenceAllocation()", 
+				makeCall("getInterrai()", 
 					function(success) {
 
 						render(success);
@@ -59,104 +59,51 @@
 			
 			
 			function render(obj){
-			
-			
+				
 				
 				console.log("Rendering", obj);
-
-			
-				var residents = obj.residents;
-				var pads = obj.pads;
-			
+				
+				var assessments = obj.assessments;
+				var assessor_cols = obj.assessor_cols;
+				
 				$(".loader").remove();
-				if (pads.length == 0 || residents.length == 0) $("#upcomingResidents").append("No available information.");
+				
+				if (assessments.length == 0) $("#upcomingResidents").append("No available information.");
 				else {
 				
 				
-					// Render pad table
-					for (var i = 0; i < pads.length; i ++){
+					for (var i = 0; i < assessments.length; i ++){
 					
-					
-						var padName = pads[i].pad;
-						var col = pads[i].col;
-						var freq = pads[i].freq;
+						var assessor = assessments[i].assessor;
 						
-						console.log(pads[i]);
-					
+						if (assessor == "") continue;
+						
+						var last_assessment = assessments[i].last_assessment.substring(0, 10);
+						var review_date = assessments[i].review_date.substring(0, 10);
+						var number_of_days = assessments[i].number_of_days;
+						var res_name = assessments[i].res_name;
+						
+						var assessor_col = assessor_cols[assessor];
+						var status_col = 	number_of_days > 180 ? "red" :
+											number_of_days >= 166 ? "orange" : 
+											number_of_days == "NEW" ? "forestgreen" : "white";
+						var font_col = status_col == "white" ? "black" : "white";
+						
 						var html = `<tr>
-										<td style="text-align:center; color:white; background-color:` + col + `">` + padName + `</td>
-										<td style="text-align:center">` + freq + `</td>
-										<td style="text-align:center">` + freq*7 + `</td>
+										<td style="text-align:center; color:white; background-color:` + assessor_col + `">` + assessor + `</td>
+										<td style="text-align:center">` + last_assessment + `</td>
+										<td style="text-align:center">` + review_date + `</td>
+										<td style="text-align:center; color:` + font_col + `; background-color:` + status_col + `">` + number_of_days + `</td>
+										<td style="text-align:center">` + res_name + `</td>
 									</tr>`;
-						$("#dataDisplayPads").append(html);
-					
-					}
-					
-				
-					// Render resident table
-					for (var i = 0; i < residents.length; i ++){
-						var unit = residents[i].unit;
-						var res = residents[i].name;
-
-						
-						if (unit == "" || res == "") continue;
-						
-						
-						var html = "";			
-						if (res == "Name of Resident"){
-							html = `<tr>
-										<th>` + unit + `</th>
-										<th>Name of Resident</th>
-										<th>AM</th>
-										<th>PM</th>
-										<th>Night</th>
-									</tr>`
-									
-						
-						}
-						
-						else {
-						
-							
-							
-							html = `<tr>
-											<td style="text-align:center">` + unit + `</td>
-											<td style="text-align:center">` + res + `</td>`;
-							
-							// AM / PM / Night
-							for (var t = 0; t < 3; t ++){
-							
-								var padID = residents[i].pads[t];
-								
-								var pad, col, padName;
-								
-								if (padID < 0 || padID >= pads.length) {
-									col = "white";
-									padName = "";
-								}else {
-									pad = pads[padID];
-									console.log("pad", pad, padID, residents[i]);
-									col = pad.col;
-									padName = pad.pad;
-								}
-								
-
-								html += `<td style="text-align:center; color:white; background-color:` + col + `">` + padName + `</td>`;
-							
-							
-							}
-
-											
-							html += `</tr>`;
-							
-							
-						}
+										
+										
 						$("#dataDisplay").append(html);
-					
+						
+						
 					}
-				
-				
 				}
+				
 			}
 			
 			// Check for permission
@@ -226,7 +173,7 @@
 	
 				<li class="flex-item wide">
 					<div> 
-						<h1 style="text-align:center; color:#008cba">Pad frequencies</h1>
+						<h1 style="text-align:center; color:#008cba">InterRai Assessments</h1> <br>
 						
 						
 						<div style="margin-left:1em; margin-top:-1em; text-align:center; font-size:16px;">
@@ -234,12 +181,14 @@
 							
 							<div class="loader"></div>
 							
-							<table id="dataDisplayPads" class="dataTable" cellpadding="5px" style="width:60%; margin-left:20%">
+							<table id="dataDisplay" class="dataTable" cellpadding="5px" style="width:60%; margin-left:20%">
 							
 								<tr>
-									<th>Pad</th>
-									<th>Daily count</th>
-									<th>Weekly count</th>
+									<th>Assessor</th>
+									<th>Last assessment</th>
+									<th>Review date</th>
+									<th style="width:100px">Days until due</th>
+									<th>Resident</th>
 								</tr>
 
 							
@@ -251,22 +200,7 @@
 						
 					</div>
 				</li>
-			
-				<li class="flex-item wide">
-					<div> 
-						<h1 style="text-align:center; color:#008cba">Continence allocation</h1>
-						
-						
-						<div class="loader"></div>
-						
-						<table id="dataDisplay" class="dataTable" cellpadding="5px" style="width:80%; margin-left:10%">
-
-							
-						</table>
-	
-					</div>
-				</li>
-				
+		
 			
 				
 

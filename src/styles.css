@@ -59,6 +59,16 @@ body {
 }
 
 
+@media only screen and (max-device-width: 1200px) {
+	
+	.flex-item {
+		width: 90%;
+		margin-left: 5%;
+	}
+
+}
+
+
 .flex-item.wide{
 	width:100%;
 }
@@ -81,19 +91,30 @@ body {
 	
 }
 
+a.mainbtn{
+		text-decoration:none;
+		color:white;
+}
+
 
 
 .flex-item.btn{
 	cursor:pointer;
-	background: #008cba;
+	background-color: #008cba;
 	color:white;
 }
 
 
-.flex-item.btn:hover{
+.flex-item.btn:hover {
 	background: white;
 	color:#008cba;
 }
+
+.flex-item.btn:hover > a.mainbtn {
+	background: white;
+	color:#008cba;
+}
+
 
 
 .loader {
@@ -135,9 +156,6 @@ h1 {
 	
 }
 
-a.mainbtn{
-		text-decoration:none;
-		color:white;
-}
+
 
 
