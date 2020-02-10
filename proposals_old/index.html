@@ -1,0 +1,193 @@
+<html>
+
+
+	<head>
+		<title>Climb - Proposals</title>
+		
+		<meta charset="UTF-8">
+		<meta name="description" content="Continence allocation">
+		
+		<link rel="icon" href="../images/logo.png">
+		<link rel="stylesheet" href="../src/styles.css">
+
+		
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+	    tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      processEscapes: true
+	    }
+	  });
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+		<script language='JavaScript' type='text/JavaScript' src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script language='JavaScript' type='text/JavaScript' src="../lib/velocity.min.js"></script>
+		<script language='JavaScript' type='text/JavaScript' src='../lib/d3.v5.min.js'></script> 
+		<script language='JavaScript' type='text/JavaScript' src="../lib/dropzone.js"></script>
+		<script>
+
+
+		
+
+
+			function init(){
+
+				console.log("init");
+				
+				
+				makeCall("getCurrentEvents()", 
+					function(success) {
+
+						render(success);
+					
+						//if (success.granted){
+							//alert("Success");
+						//}else{
+							//alert("Permission denied please log in");
+						//}
+					
+					},
+					function(failure){
+						//console.log("failure", failure);
+						alert("Permission denied please log in");
+					});
+				
+
+
+			}
+			
+			
+			
+			
+			function render(obj){
+			
+			
+				
+				console.log("Rendering", obj);
+
+				$(".loader").remove();
+				if (obj.blog == null || obj.blog.html == "") $("#upcomingResidents").append("No upcoming or overdue assessments.");
+				else {
+				
+				
+					// Blog
+					var blogHTML = obj.blog.html;
+					var blobImages = obj.blog.images;
+					$("#theBlog").html(blogHTML);
+					
+					
+					console.log("blobImages", blobImages);
+					/*
+					for (var b = 0; b < blobImages.length; b ++){
+						var blob = blobImages[b];
+						const imageUrl = URL.createObjectURL(blob);
+						const img = document.querySelector('img');
+						img.addEventListener('load', () => URL.revokeObjectURL(imageUrl));
+						document.querySelector('img').src = imageUrl;
+					}
+					*/
+				
+				}
+				
+			}
+			
+			// Check for permission
+			function makeCall(fn, callback = function(response) {}, errorFn = function(errorMsg) {} ){
+
+
+				var scriptUrl = "https://script.google.com/macros/s/AKfycbzlGdDh25NXMgk-962_Y2P49Wm9LiXy1kyntd1PpYAzPoz92xA/exec";
+				var url = scriptUrl + "?fn=" + fn + "&callback=?";
+				console.log("Requesting", url);
+
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					success: callback,
+					error:errorFn
+				});
+
+			}
+
+
+
+
+
+
+		</script>
+
+	</head>
+	<body  onload="init()">
+
+		<div id="main">
+
+
+			
+			
+			
+			
+			<ul class="flex-container">
+			
+			
+			
+						
+				<li class="flex-item wide">
+				
+					<a href="../" style="text-decoration:none; color:black">
+					
+						<div> 
+							<h1 style="text-align:center; font-size:300%; color:#008cba">Clinical Manager's Bulletin</h1>
+							
+							
+							<div style="margin-left:1em; margin-top:-1em; text-align:center; font-size:16px;">
+								
+								A summary of resident care and upcoming events <br> 
+								
+								<span style="font-size:80%">by Aldrin Tan Anana, RN</span>
+								
+							</div>
+							
+							
+							
+						</div>
+						
+					</a>
+				</li>
+			
+			
+			
+
+				
+				<li class="flex-item medium">
+					<div> 
+						
+						
+						<div class="loader"></div>
+						<div id="theBlog" class="blog">
+							
+							
+							
+						</div>
+						
+						
+						
+					</div>
+				</li>
+
+
+				
+
+			</ul>
+			
+
+
+			
+		</div>
+
+		
+
+	</body>
+
+
+
+
+</html>
