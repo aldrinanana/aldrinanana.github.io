@@ -155,6 +155,30 @@
 					 }
 					
 				}
+				
+				
+				if (obj.blog == null || obj.blog.html == "") $("#upcomingResidents").append("No upcoming or overdue assessments.");
+				else {
+				
+				
+					// Blog
+					var blogHTML = obj.blog.html;
+					var blobImages = obj.blog.images;
+					$("#theBlog").html(blogHTML);
+					
+					
+					console.log("blobImages", blobImages);
+					/*
+					for (var b = 0; b < blobImages.length; b ++){
+						var blob = blobImages[b];
+						const imageUrl = URL.createObjectURL(blob);
+						const img = document.querySelector('img');
+						img.addEventListener('load', () => URL.revokeObjectURL(imageUrl));
+						document.querySelector('img').src = imageUrl;
+					}
+					*/
+				
+				}
 			
 			
 			}
@@ -279,33 +303,26 @@
 					</a>
 				</li>
 				
-				
-				<li class="flex-item btn">
-				
-					<a class="mainbtn" href="proposals/">
-						<div> 
-							<h2>Proposals</h2>
-							
-							Visions for the future
-							
-							
-						</div>
-					</a>
-				</li>
-				
 
-				<li class="flex-item btn">
+
 				
-					<a class="mainbtn">
-						<div> 
-							<h2>Training courses</h2>
+				<li class="flex-item wide">
+					<div> 
+						
+						
+						<div class="loader"></div>
+						<div id="theBlog" class="blog">
 							
-							Past and upcoming training courses
 							
 							
 						</div>
-					</a>
+						
+						
+						
+					</div>
 				</li>
+
+
 				
 
 
